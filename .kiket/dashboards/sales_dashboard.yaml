@@ -1,0 +1,142 @@
+model_version: "1.0"
+dashboard:
+  id: sales-dashboard
+  name: Sales Dashboard
+  description: Sales pipeline and team performance metrics.
+  version: 1.0.0
+
+  layout:
+    columns: 4
+
+  widgets:
+    # Row 1: Key Metrics
+    - id: pipeline-value
+      type: metric
+      title: Pipeline Value
+      position: {row: 1, col: 1}
+      query:
+        issue_types: [lead]
+        statuses: [qualified, demo_scheduled, proposal, negotiating]
+        aggregate: sum
+        field: custom_fields.deal_value
+      format: currency
+
+    - id: won-mtd
+      type: metric
+      title: Won (MTD)
+      position: {row: 1, col: 2}
+      query:
+        issue_types: [lead]
+        statuses: [won]
+        closed_date: this_month
+        aggregate: sum
+        field: custom_fields.deal_value
+      format: currency
+
+    - id: deals-in-progress
+      type: metric
+      title: Active Deals
+      position: {row: 1, col: 3}
+      query:
+        issue_types: [lead]
+        statuses: [qualified, demo_scheduled, proposal, negotiating]
+        aggregate: count
+
+    - id: avg-deal-size
+      type: metric
+      title: Avg Deal Size
+      position: {row: 1, col: 4}
+      query:
+        issue_types: [lead]
+        statuses: [won]
+        date_range: last_90_days
+        aggregate: avg
+        field: custom_fields.deal_value
+      format: currency
+
+    # Row 2: Pipeline & Funnel
+    - id: funnel
+      type: funnel
+      title: Sales Funnel
+      position: {row: 2, col: 1, span: 2}
+      query:
+        issue_types: [lead]
+        group_by: status
+        order: [lead, qualified, demo_scheduled, proposal, negotiating, won]
+        value_field: custom_fields.deal_value
+
+    - id: by-stage
+      type: bar_chart
+      title: Pipeline by Stage
+      position: {row: 2, col: 3, span: 2}
+      query:
+        issue_types: [lead]
+        statuses: [qualified, demo_scheduled, proposal, negotiating]
+        group_by: status
+        aggregate: sum
+        field: custom_fields.deal_value
+
+    # Row 3: Conversion & Win Rate
+    - id: win-rate
+      type: gauge
+      title: Win Rate (90 Days)
+      position: {row: 3, col: 1}
+      query:
+        issue_types: [lead]
+        date_range: last_90_days
+        aggregate: win_rate
+      thresholds:
+        critical: 20
+        warning: 30
+
+    - id: avg-sales-cycle
+      type: metric
+      title: Avg Sales Cycle
+      position: {row: 3, col: 2}
+      query:
+        issue_types: [lead]
+        statuses: [won]
+        date_range: last_90_days
+        aggregate: avg
+        field: cycle_time
+      format: days
+
+    - id: by-rep
+      type: bar_chart
+      title: Pipeline by Rep
+      position: {row: 3, col: 3, span: 2}
+      query:
+        issue_types: [lead]
+        statuses: [qualified, demo_scheduled, proposal, negotiating]
+        group_by: assignee
+        aggregate: sum
+        field: custom_fields.deal_value
+
+    # Row 4: Trends & Forecast
+    - id: revenue-trend
+      type: line_chart
+      title: Won Deals (12 Months)
+      position: {row: 4, col: 1, span: 2}
+      query:
+        issue_types: [lead]
+        statuses: [won]
+        date_range: last_12_months
+        aggregate: sum
+        field: custom_fields.deal_value
+        group_by: closed_date
+        interval: month
+
+    - id: closing-soon
+      type: list
+      title: Closing This Month
+      position: {row: 4, col: 3, span: 2}
+      query:
+        issue_types: [lead]
+        statuses: [proposal, negotiating]
+        custom_fields.expected_close_date: this_month
+        order_by: custom_fields.deal_value
+        order: desc
+        limit: 10
+      fields: [title, custom_fields.deal_value, assignee]
+
+  refresh_interval: 300  # 5 minutes

@@ -1,0 +1,13 @@
+model_version: "1.0"
+project:
+  id: sales
+  name: Sales Pipeline
+  version: 1.0.0
+  description: Sales lead and opportunity management workflows.
+
+  extensions:
+    required:
+      - email
+    optional:
+      - slack
+      - salesforce

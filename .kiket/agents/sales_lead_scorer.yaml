@@ -1,0 +1,65 @@
+model_version: "1.0"
+id: ai.sales.lead_scorer
+version: 1.0.0
+name: Lead Scorer
+description: |
+  Score leads based on company fit, engagement signals, and qualification criteria.
+  Returns a score from 0-100 with detailed breakdown.
+
+prompt: |
+  Score this sales lead based on the following information.
+
+  **Lead Information:**
+  - Company: {{issue.custom_fields.company_name}}
+  - Contact: {{issue.custom_fields.contact_name}} ({{issue.custom_fields.contact_email}})
+  - Company Size: {{issue.custom_fields.company_size}}
+  - Lead Source: {{issue.custom_fields.lead_source}}
+
+  **Scoring Criteria:**
+  1. **Company Fit (0-30 points)**
+     - Target company size (SMB/Mid-market: +20, Enterprise: +30, Startup: +10)
+     - Industry fit
+     - Geographic location
+
+  2. **Intent Signals (0-40 points)**
+     - Lead source quality (referral: +40, event: +30, website: +20, outbound: +10)
+     - Engagement level
+     - Urgency indicators
+
+  3. **Contact Quality (0-30 points)**
+     - Decision maker vs influencer
+     - Valid business email
+     - Complete information
+
+  Respond in JSON format:
+  ```json
+  {
+    "total_score": 75,
+    "breakdown": {
+      "company_fit": 25,
+      "intent_signals": 30,
+      "contact_quality": 20
+    },
+    "qualification": "qualified|nurture|disqualify",
+    "reasoning": "Brief explanation",
+    "recommended_actions": ["Action 1", "Action 2"]
+  }
+  ```
+
+capabilities:
+  - lead_scoring
+  - qualification
+
+context:
+  required:
+    - issues
+  optional: []
+
+human_in_loop:
+  required: false
+
+confidence_threshold: 0.7
+
+metadata:
+  output_format: json
+  max_tokens: 600

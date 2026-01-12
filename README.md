@@ -1,0 +1,55 @@
+# kiket-definitions-sales
+
+Sales pipeline and lead management workflows for Kiket.
+
+## Overview
+
+This definition provides a complete sales pipeline system including:
+
+- **Workflow**: Lead lifecycle from capture to close (won/lost)
+- **AI Agents**: Lead scoring, company research, deal advisory
+- **Intake Form**: Public demo request / lead capture form
+- **Board**: Pipeline board with deal size swimlanes
+- **Dashboard**: Pipeline value, win rates, sales performance
+- **Automations**: Lead scoring, qualification, stale deal alerts
+
+## Structure
+
+```
+.kiket/
+├── project.yaml           # Definition metadata
+├── issue_types.yaml       # Lead issue type
+├── workflows/
+│   └── sales.yaml         # Sales pipeline workflow
+├── agents/
+│   ├── sales_lead_scorer.yaml
+│   ├── sales_company_research.yaml
+│   └── sales_deal_advisor.yaml
+├── intakes/
+│   └── lead_capture.yaml
+├── boards/
+│   └── sales.yaml
+├── dashboards/
+│   └── sales_dashboard.yaml
+└── automations/
+    └── sales_automations.yaml
+```
+
+## Installation
+
+Install via Kiket marketplace or include in your project configuration:
+
+```yaml
+definitions:
+  - id: sales
+    version: ">=1.0.0"
+```
+
+## Required Extensions
+
+- `email` - Email notifications
+
+## Optional Extensions
+
+- `slack` - Team notifications
+- `salesforce` - CRM integration

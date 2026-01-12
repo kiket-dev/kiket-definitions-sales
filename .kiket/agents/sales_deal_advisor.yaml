@@ -1,0 +1,68 @@
+model_version: "1.0"
+id: ai.sales.deal_advisor
+version: 1.0.0
+name: Deal Advisor
+description: |
+  Provide deal coaching, win/loss analysis, and negotiation suggestions.
+
+prompt: |
+  {{#if (eq input.analysis_type "loss_analysis")}}
+  Analyze this lost deal and provide insights for improvement.
+
+  **Deal Information:**
+  - Company: {{issue.custom_fields.company_name}}
+  - Deal Value: ${{issue.custom_fields.deal_value}}
+  - Lead Source: {{issue.custom_fields.lead_source}}
+  - Time in Pipeline: {{issue.created_at}} to {{issue.updated_at}}
+
+  **Deal History:**
+  {{#each context.activities}}
+  - {{this.date}}: {{this.action}} - {{this.notes}}
+  {{/each}}
+
+  Provide:
+  1. **Loss Factors**: What likely contributed to the loss
+  2. **Missed Opportunities**: What could have been done differently
+  3. **Patterns**: Compare to other lost deals
+  4. **Recommendations**: How to improve win rate
+
+  {{else if (eq input.analysis_type "coaching")}}
+  Provide coaching for this active deal.
+
+  **Deal Information:**
+  - Company: {{issue.custom_fields.company_name}}
+  - Stage: {{issue.status}}
+  - Deal Value: ${{issue.custom_fields.deal_value}}
+  - Days in Stage: {{context.days_in_stage}}
+
+  Suggest:
+  1. **Next Best Action**: What to do right now
+  2. **Risk Factors**: Potential blockers
+  3. **Stakeholder Strategy**: Who else to engage
+  4. **Competitive Position**: How to differentiate
+
+  {{else}}
+  Provide a deal health assessment.
+  {{/if}}
+
+capabilities:
+  - deal_coaching
+  - win_loss_analysis
+
+context:
+  required:
+    - issues
+  optional:
+    - telemetry
+
+human_in_loop:
+  required: false
+
+metadata:
+  output_format: markdown
+  max_tokens: 1200
+  inputs:
+    - key: analysis_type
+      type: enum
+      options: [loss_analysis, coaching, health_check]
+      default: health_check

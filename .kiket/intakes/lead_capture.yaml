@@ -1,0 +1,116 @@
+model_version: "1.0"
+intake:
+  id: lead-capture
+  name: Request Demo
+  description: Request a personalized demo of Kiket.
+  version: 1.0.0
+
+  public: true
+  slug: demo
+
+  branding:
+    title: "See Kiket in Action"
+    subtitle: "Schedule a personalized demo with our team."
+    logo: true
+
+  issue:
+    type: lead
+    workflow: sales
+    initial_state: lead
+    title_template: "Lead: {{company_name}}"
+
+  fields:
+    - key: contact_name
+      type: string
+      label: Your Name
+      placeholder: "Jane Smith"
+      required: true
+      map_to: custom_fields.contact_name
+
+    - key: contact_email
+      type: email
+      label: Work Email
+      placeholder: "jane@company.com"
+      required: true
+      map_to: custom_fields.contact_email
+      validation:
+        pattern: "^[^@]+@(?!gmail|yahoo|hotmail|outlook)[^@]+\\.[^@]+$"
+        message: "Please use your work email address"
+
+    - key: company_name
+      type: string
+      label: Company Name
+      placeholder: "Acme Corp"
+      required: true
+      map_to: custom_fields.company_name
+
+    - key: company_size
+      type: enum
+      label: Company Size
+      required: true
+      options:
+        - value: startup
+          label: "1-10 employees"
+        - value: smb
+          label: "11-50 employees"
+        - value: mid_market
+          label: "51-500 employees"
+        - value: enterprise
+          label: "500+ employees"
+      map_to: custom_fields.company_size
+
+    - key: use_case
+      type: enum
+      label: What brings you to Kiket?
+      required: true
+      options:
+        - value: project_management
+          label: "Project Management"
+        - value: workflow_automation
+          label: "Workflow Automation"
+        - value: ai_features
+          label: "AI-Powered Features"
+        - value: replacing_tool
+          label: "Replacing Current Tool"
+        - value: other
+          label: "Other"
+
+    - key: current_tool
+      type: string
+      label: Current Tool (if any)
+      placeholder: "Jira, Asana, Monday, etc."
+      required: false
+
+    - key: message
+      type: text
+      label: Anything specific you'd like to see?
+      placeholder: "Tell us about your workflow needs..."
+      required: false
+      max_length: 1000
+      map_to: description
+
+  confirmation:
+    title: "Thanks for your interest!"
+    message: |
+      We've received your demo request and will be in touch within 1 business day.
+
+      In the meantime, check out our [documentation](https://docs.kiket.dev) to learn more.
+
+  notifications:
+    on_submit:
+      - type: email
+        to: "{{contact_email}}"
+        template: demo_request_received
+      - type: slack
+        channel: "#sales-leads"
+        message: "🎯 New demo request from {{contact_name}} at {{company_name}} ({{company_size}})"
+      - type: email
+        to: "sales@kiket.dev"
+        template: new_lead_alert
+
+  rate_limit:
+    max_submissions: 2
+    window: 24h
+
+  spam_protection:
+    honeypot: true

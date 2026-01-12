@@ -1,0 +1,87 @@
+model_version: "1.0"
+board:
+  id: sales-pipeline
+  name: Sales Pipeline
+  description: Sales deal pipeline and opportunity tracking.
+  version: 1.0.0
+
+  filters:
+    issue_types:
+      - lead
+    workflows:
+      - sales
+
+  columns:
+    - id: leads
+      name: Leads
+      states:
+        - lead
+      wip_limit: null
+      color: secondary
+
+    - id: qualified
+      name: Qualified
+      states:
+        - qualified
+      wip_limit: 20
+      color: info
+
+    - id: demo
+      name: Demo Scheduled
+      states:
+        - demo_scheduled
+      wip_limit: 10
+      color: primary
+
+    - id: proposal
+      name: Proposal
+      states:
+        - proposal
+      wip_limit: 15
+      color: primary
+
+    - id: negotiating
+      name: Negotiating
+      states:
+        - negotiating
+      wip_limit: 10
+      color: warning
+
+    - id: won
+      name: Won
+      states:
+        - won
+      wip_limit: null
+      color: success
+
+  swimlanes:
+    enabled: true
+    field: custom_fields.deal_size
+    values:
+      - value: enterprise
+        label: "💎 Enterprise ($100k+)"
+      - value: mid_market
+        label: "🏢 Mid-Market ($25k-$100k)"
+      - value: smb
+        label: "🏪 SMB ($5k-$25k)"
+      - value: starter
+        label: "🌱 Starter (<$5k)"
+
+  card_fields:
+    - title
+    - custom_fields.company_name
+    - custom_fields.deal_value
+    - custom_fields.lead_score
+    - assignee
+    - custom_fields.next_action_date
+
+  quick_filters:
+    - field: assignee
+      label: My Deals
+      value: "@me"
+    - field: custom_fields.deal_size
+      label: Enterprise
+      value: enterprise
+    - field: custom_fields.closing_this_month
+      label: Closing This Month
+      value: true

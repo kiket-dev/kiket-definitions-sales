@@ -1,0 +1,55 @@
+model_version: "1.0"
+id: ai.sales.company_research
+version: 1.0.0
+name: Company Research
+description: |
+  Research company information for sales preparation.
+  Provides company overview, recent news, potential pain points, and talking points.
+
+prompt: |
+  Research the following company to prepare for a sales conversation.
+
+  **Company:** {{issue.custom_fields.company_name}}
+  **Contact:** {{issue.custom_fields.contact_name}}
+  **Context:** {{input.format}}
+
+  {{#if (eq input.format "demo_prep")}}
+  Prepare a demo briefing including:
+  1. **Company Overview**: What they do, size, industry
+  2. **Recent News**: Any announcements, funding, leadership changes
+  3. **Potential Pain Points**: Based on their industry and size
+  4. **Competitors**: Who they might be comparing us to
+  5. **Talking Points**: Key value propositions to emphasize
+  6. **Questions to Ask**: Discovery questions for the demo
+
+  Format as a briefing document the sales rep can review before the call.
+  {{else}}
+  Provide a quick overview:
+  1. **Company Summary**: Brief description
+  2. **Company Size**: Estimated employees and revenue
+  3. **Industry**: Primary industry/vertical
+  4. **Key Insights**: Notable information for sales
+
+  Keep it concise (2-3 paragraphs).
+  {{/if}}
+
+capabilities:
+  - research
+  - sales_enablement
+
+context:
+  required:
+    - issues
+  optional: []
+
+human_in_loop:
+  required: false
+
+metadata:
+  output_format: markdown
+  max_tokens: 1500
+  inputs:
+    - key: format
+      type: enum
+      options: [quick, demo_prep]
+      default: quick

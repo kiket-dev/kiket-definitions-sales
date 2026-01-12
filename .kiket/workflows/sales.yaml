@@ -1,0 +1,163 @@
+model_version: "1.0"
+workflow:
+  id: sales
+  name: Sales Pipeline
+  version: 1.0.0
+  description: Sales pipeline from lead capture to closed deal.
+
+states:
+  lead:
+    type: initial
+    category: pending
+    metadata:
+      label: Lead
+      color: secondary
+      icon: "🎯"
+      description: New lead awaiting qualification.
+    on_enter:
+      - action: ai_analyze
+        agent: ai.sales.lead_scorer
+        store_result_in: custom_fields.lead_score
+      - action: ai_analyze
+        agent: ai.sales.company_research
+        store_result_in: custom_fields.company_intel
+
+  qualified:
+    type: active
+    category: active
+    metadata:
+      label: Qualified
+      color: info
+      icon: "✓"
+      description: Lead qualified, ready for outreach.
+    sla:
+      warning: 24h
+      breach: 48h
+      business_hours: true
+
+  demo_scheduled:
+    type: active
+    category: active
+    metadata:
+      label: Demo Scheduled
+      color: primary
+      icon: "📅"
+      description: Demo or discovery call scheduled.
+    on_enter:
+      - action: ai_analyze
+        agent: ai.sales.company_research
+        store_result_in: comment
+        input:
+          format: demo_prep
+
+  proposal:
+    type: active
+    category: active
+    metadata:
+      label: Proposal
+      color: warning
+      icon: "📝"
+      description: Proposal sent, awaiting response.
+    sla:
+      warning: 72h
+      breach: 168h
+      business_hours: true
+
+  negotiating:
+    type: active
+    category: active
+    metadata:
+      label: Negotiating
+      color: warning
+      icon: "💬"
+      description: In active negotiation.
+
+  won:
+    type: final
+    category: completed
+    metadata:
+      label: Won
+      color: success
+      icon: "🎉"
+      description: Deal closed successfully.
+    on_enter:
+      - action: notify
+        recipients:
+          roles: [sales, admin]
+        message: "🎉 Deal won: ${issue.custom_fields.company_name} - $${issue.custom_fields.deal_value}"
+        level: success
+      - action: webhook
+        url: "${env.CRM_WEBHOOK}"
+        method: POST
+        body:
+          event: deal_won
+          company: "${issue.custom_fields.company_name}"
+          value: "${issue.custom_fields.deal_value}"
+
+  lost:
+    type: final
+    category: completed
+    metadata:
+      label: Lost
+      color: danger
+      icon: "❌"
+      description: Deal lost or disqualified.
+    on_enter:
+      - action: ai_analyze
+        agent: ai.sales.deal_advisor
+        store_result_in: comment
+        input:
+          analysis_type: loss_analysis
+
+transitions:
+  - from: lead
+    to: qualified
+    name: Qualify Lead
+    conditions:
+      - field: custom_fields.lead_score
+        operator: ">="
+        value: 50
+
+  - from: lead
+    to: lost
+    name: Disqualify
+    conditions:
+      - field: custom_fields.lead_score
+        operator: "<"
+        value: 30
+
+  - from: qualified
+    to: demo_scheduled
+    name: Schedule Demo
+
+  - from: qualified
+    to: lost
+    name: No Interest
+
+  - from: demo_scheduled
+    to: proposal
+    name: Send Proposal
+
+  - from: demo_scheduled
+    to: lost
+    name: No Fit
+
+  - from: proposal
+    to: negotiating
+    name: Start Negotiation
+
+  - from: proposal
+    to: won
+    name: Accept Proposal
+
+  - from: proposal
+    to: lost
+    name: Proposal Rejected
+
+  - from: negotiating
+    to: won
+    name: Close Deal
+
+  - from: negotiating
+    to: lost
+    name: Walk Away

@@ -1,0 +1,93 @@
+model_version: "1.0"
+automations:
+  - id: lead-scoring
+    name: Score New Leads
+    description: Automatically score and qualify new leads.
+    version: 1.0.0
+    enabled: true
+
+    trigger:
+      event: issue.created
+      conditions:
+        - field: issue_type
+          equals: lead
+
+    actions:
+      - type: ai_action
+        agent: ai.sales.lead_scorer
+        store_result_in: custom_fields.lead_score
+      - type: ai_action
+        agent: ai.sales.company_research
+        store_result_in: comment
+
+  - id: auto-qualify-high-score
+    name: Auto-qualify High Score Leads
+    description: Automatically qualify leads with score above 80.
+    version: 1.0.0
+    enabled: true
+
+    trigger:
+      event: issue.updated
+      conditions:
+        - field: issue_type
+          equals: lead
+        - field: custom_fields.lead_score
+          gte: 80
+        - field: status
+          equals: lead
+
+    actions:
+      - type: transition
+        to: qualified
+      - type: notify
+        recipients:
+          roles: [sales]
+        message: "🌟 High-value lead qualified: {{issue.custom_fields.company_name}} (Score: {{issue.custom_fields.lead_score}})"
+
+  - id: stale-deal-alert
+    name: Stale Deal Alert
+    description: Alert when deals have no activity for 14 days.
+    version: 1.0.0
+    enabled: true
+
+    trigger:
+      event: schedule
+      cron: "0 9 * * 1"  # Weekly on Monday at 9 AM
+
+    query:
+      issue_types: [lead]
+      statuses: [qualified, demo_scheduled, proposal, negotiating]
+      last_updated_before: 14d
+
+    actions:
+      - type: notify
+        recipients:
+          user: assignee
+        message: "📊 Stale deal alert: {{issue.title}} has had no activity for 14+ days"
+      - type: add_label
+        label: stale
+
+  - id: deal-won-celebration
+    name: Celebrate Won Deals
+    description: Notify team when deals are won.
+    version: 1.0.0
+    enabled: true
+
+    trigger:
+      event: issue.transitioned
+      conditions:
+        - field: issue_type
+          equals: lead
+        - field: to_status
+          equals: won
+
+    actions:
+      - type: notify
+        recipients:
+          roles: [sales, executive]
+        message: "🎉 Deal won! {{issue.custom_fields.company_name}} - ${{issue.custom_fields.deal_value}}"
+        level: success
+      - type: webhook
+        url: "{{config.slack_webhook}}"
+        payload:
+          text: "🎉 *Deal Won!* {{issue.custom_fields.company_name}} - ${{issue.custom_fields.deal_value}} by {{issue.assignee.name}}"
