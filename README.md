@@ -11,6 +11,7 @@ This definition provides a complete sales pipeline system including:
 - **Intake Form**: Public demo request / lead capture form
 - **Board**: Pipeline board with deal size swimlanes
 - **Dashboard**: Pipeline value, win rates, sales performance
+- **Analytics**: Pipeline health, conversion funnel, deal velocity, revenue trends
 - **Automations**: Lead scoring, qualification, stale deal alerts
 
 ## Structure
@@ -31,6 +32,9 @@ This definition provides a complete sales pipeline system including:
 │   └── sales.yaml
 ├── dashboards/
 │   └── sales_dashboard.yaml
+├── analytics/
+│   └── dashboards/
+│       └── pipeline_health.yaml
 └── automations/
     └── sales_automations.yaml
 ```
