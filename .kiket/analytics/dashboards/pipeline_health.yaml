@@ -1,0 +1,187 @@
+model_version: "1.0"
+dashboard:
+  id: pipeline-health
+  name: Pipeline Health
+  description: Track sales pipeline value, deal velocity, and conversion metrics.
+  widgets:
+    - id: pipeline-value-kpi
+      type: kpi
+      title: Total Pipeline Value
+      query: fct_sales_pipeline
+      query_config:
+        model: fct_sales_pipeline
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+      options:
+        format: currency
+        comparison:
+          interval: "30d"
+
+    - id: pipeline-by-stage
+      type: leaderboard
+      title: Pipeline Value by Stage
+      query: fct_sales_pipeline
+      query_config:
+        model: fct_sales_pipeline
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+      visualization:
+        group_by: stage
+        value: total_value
+        format: currency
+
+    - id: win-rate-trend
+      type: timeseries
+      title: Win Rate Trend
+      query: fct_sales_outcomes
+      query_config:
+        model: fct_sales_outcomes
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+        order_by:
+          - closed_month
+      visualization:
+        x: closed_month
+        y: win_rate
+        format: percentage
+
+    - id: deal-velocity-trend
+      type: timeseries
+      title: Average Deal Cycle (Days)
+      query: fct_sales_velocity
+      query_config:
+        model: fct_sales_velocity
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+        order_by:
+          - closed_date
+      visualization:
+        x: closed_date
+        y: avg_cycle_days
+
+    - id: conversion-funnel
+      type: table
+      title: Stage Conversion Rates
+      query: fct_sales_funnel
+      query_config:
+        model: fct_sales_funnel
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+        select:
+          - from_stage
+          - to_stage
+          - conversion_rate
+          - avg_days_in_stage
+        order_by:
+          - stage_order
+
+    - id: revenue-closed-trend
+      type: timeseries
+      title: Revenue Closed by Month
+      query: fct_sales_revenue
+      query_config:
+        model: fct_sales_revenue
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+        order_by:
+          - closed_month
+      visualization:
+        x: closed_month
+        y: total_revenue
+        format: currency
+
+    - id: lead-source-performance
+      type: leaderboard
+      title: Revenue by Lead Source
+      query: fct_sales_revenue
+      query_config:
+        model: fct_sales_revenue
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+      visualization:
+        group_by: lead_source
+        value: total_revenue
+        format: currency
+
+    - id: deals-at-risk
+      type: table
+      title: Deals at Risk (Stale > 14 days)
+      query: fct_sales_pipeline
+      query_config:
+        model: fct_sales_pipeline
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+          days_in_stage_gt: 14
+        select:
+          - deal_name
+          - stage
+          - value
+          - days_in_stage
+          - owner_name
+        order_by:
+          - days_in_stage DESC
+        limit: 15
+
+  alerts:
+    - query: fct_sales_pipeline
+      query_config:
+        model: fct_sales_pipeline
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+      condition: total_pipeline_value < target_pipeline * 0.8
+      notify_roles:
+        - manager
+      message: "Pipeline value is below 80% of target"
+
+    - query: fct_sales_outcomes
+      query_config:
+        model: fct_sales_outcomes
+        parameters:
+          - name: project_id
+            type: integer
+            required: true
+        filters:
+          project_id: ":project_id"
+        order_by:
+          - closed_month DESC
+        limit: 1
+      condition: win_rate < 0.20
+      notify_roles:
+        - manager
+      message: "Win rate has dropped below 20%"
