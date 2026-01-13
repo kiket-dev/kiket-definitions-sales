@@ -1,40 +1,24 @@
 model_version: "1.0"
 
 issue_types:
-  lead:
-    name: Lead
-    description: Sales lead or prospect
-    icon: "🎯"
-    color: "#10B981"
-    workflow: sales
-    fields:
-      - key: company_name
-        type: string
-        label: Company Name
-        required: true
-      - key: contact_email
-        type: email
-        label: Contact Email
-        required: true
-      - key: contact_name
-        type: string
-        label: Contact Name
-      - key: company_size
-        type: enum
-        label: Company Size
-        options: [startup, smb, mid_market, enterprise]
-      - key: lead_source
-        type: enum
-        label: Lead Source
-        options: [website, referral, event, outbound, partner]
-      - key: lead_score
-        type: number
-        label: Lead Score
-        min: 0
-        max: 100
-      - key: deal_value
-        type: number
-        label: Deal Value ($)
-      - key: close_date
-        type: date
-        label: Expected Close Date
+  - key: lead
+    label: Lead
+    allow_children: false
+    color: success
+    icon: bullseye
+    position: 0
+    active: true
+  - key: opportunity
+    label: Opportunity
+    allow_children: true
+    color: primary
+    icon: graph-up-arrow
+    position: 1
+    active: true
+  - key: deal
+    label: Deal
+    allow_children: false
+    color: warning
+    icon: briefcase
+    position: 2
+    active: true
