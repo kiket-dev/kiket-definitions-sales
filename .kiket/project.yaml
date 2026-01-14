@@ -5,6 +5,15 @@ project:
   version: 1.0.0
   description: Sales lead and opportunity management workflows.
 
+  team:
+    roles:
+      - name: sales_rep
+        description: Sales representative managing leads and opportunities
+      - name: account_exec
+        description: Account executive closing deals and managing accounts
+      - name: sales_manager
+        description: Sales manager overseeing pipeline and team performance
+
   extensions:
     required:
       - email
