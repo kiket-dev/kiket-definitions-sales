@@ -1,0 +1,25 @@
+<p>Hello {{ inbound_email.from_name | default: "there" }},</p>
+
+<p>Thank you for requesting a demo of {{ organization.name }}! We're excited to show you what our platform can do for your team.</p>
+
+{% if issue %}
+<p>
+  <strong>Reference:</strong> {{ issue.key }}
+</p>
+{% endif %}
+
+<p>A member of our team will reach out within the next business day to schedule a personalized demo at your convenience.</p>
+
+<p>To help us prepare for our call, please feel free to reply to this email with:</p>
+<ul>
+  <li>Your team size and structure</li>
+  <li>Current tools you're using</li>
+  <li>Specific challenges you're looking to solve</li>
+</ul>
+
+<p>We look forward to connecting with you soon!</p>
+
+<p>
+  Best regards,<br>
+  {{ organization.name }} Sales Team
+</p>

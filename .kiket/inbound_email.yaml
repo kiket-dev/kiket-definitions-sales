@@ -1,0 +1,44 @@
+# Inbound Email Configuration for Sales Definition
+# Enables email-to-lead functionality for sales pipeline
+
+inbound_email:
+  enabled: true
+
+  # Default email address mappings
+  mappings:
+    - email_address: sales
+      description: "Sales inquiries and leads"
+      issue_defaults:
+        issue_type: Lead
+        priority: medium
+        labels:
+          - sales
+          - inbound-lead
+      sender_policy: open
+      auto_reply: true
+      auto_reply_template: lead_confirmation
+
+    - email_address: demo
+      description: "Demo requests"
+      issue_defaults:
+        issue_type: Lead
+        priority: high
+        labels:
+          - demo-request
+          - qualified-lead
+      sender_policy: open
+      auto_reply: true
+      auto_reply_template: demo_request
+
+    - email_address: partnerships
+      description: "Partnership inquiries"
+      issue_defaults:
+        issue_type: Opportunity
+        priority: medium
+        labels:
+          - partnership
+      sender_policy: known_domains
+      auto_reply: true
+      auto_reply_template: partnership_received
+
+  templates_path: email_templates

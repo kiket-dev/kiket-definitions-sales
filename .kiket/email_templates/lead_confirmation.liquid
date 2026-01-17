@@ -1,0 +1,23 @@
+<p>Hello {{ inbound_email.from_name | default: "there" }},</p>
+
+<p>Thank you for your interest in {{ organization.name }}! We've received your inquiry and one of our sales representatives will be in touch shortly.</p>
+
+{% if issue %}
+<p>
+  <strong>Reference:</strong> {{ issue.key }}
+</p>
+{% endif %}
+
+<p>In the meantime, feel free to:</p>
+<ul>
+  <li>Explore our product features on our website</li>
+  <li>Check out our documentation and guides</li>
+  <li>Reply to this email with any additional questions</li>
+</ul>
+
+<p>We look forward to speaking with you!</p>
+
+<p>
+  Best regards,<br>
+  {{ organization.name }} Sales Team
+</p>

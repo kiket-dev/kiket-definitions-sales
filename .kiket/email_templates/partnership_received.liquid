@@ -1,0 +1,16 @@
+<p>Hello {{ inbound_email.from_name | default: "there" }},</p>
+
+<p>Thank you for your interest in partnering with {{ organization.name }}. We've received your inquiry and our partnerships team will review it carefully.</p>
+
+{% if issue %}
+<p>
+  <strong>Reference:</strong> {{ issue.key }}
+</p>
+{% endif %}
+
+<p>We're always looking for strategic partnerships that create mutual value. Our team will be in touch if there's a potential fit for collaboration.</p>
+
+<p>
+  Best regards,<br>
+  {{ organization.name }} Partnerships Team
+</p>
