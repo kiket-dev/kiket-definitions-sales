@@ -1,6 +1,6 @@
 model_version: "1.0"
 project:
-  id: sales
+  key: SALES
   name: Sales Pipeline
   version: 1.0.0
   description: Sales lead and opportunity management workflows.

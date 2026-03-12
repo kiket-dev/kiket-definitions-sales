@@ -1,5 +1,5 @@
 model_version: "1.0"
-intake:
+intake_form:
   id: lead-capture
   name: Request Demo
   description: Request a personalized demo of Kiket.
