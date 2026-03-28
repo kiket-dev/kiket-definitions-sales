@@ -20,3 +20,59 @@ project:
     optional:
       - slack
       - salesforce
+
+  seed_data:
+    issues:
+      - title: Meridian Healthcare - 500 seat enterprise deal
+        description: VP of Engineering reached out after seeing the DevOps Summit demo. Budget approved, evaluating against Jira and Linear.
+        issue_type: opportunity
+        status: demo_scheduled
+        priority: high
+        labels:
+          - enterprise
+          - healthcare
+
+      - title: Inbound lead from pricing page - FinTech startup
+        description: CTO of a 50-person fintech startup submitted a demo request. Company recently raised Series B, scaling engineering team.
+        issue_type: lead
+        status: lead
+        priority: medium
+        labels:
+          - inbound
+          - fintech
+
+      - title: Orion Logistics - renewal and upsell to Business plan
+        description: Current Starter plan customer with 80 seats. Team leads requesting advanced analytics and custom workflows available on Business tier.
+        issue_type: deal
+        status: proposal
+        priority: high
+        labels:
+          - upsell
+          - renewal
+
+      - title: TechNova Inc - negotiating annual contract terms
+        description: 200-seat deal in final negotiation. Procurement requesting volume discount and custom SLA terms for SOC 2 compliance.
+        issue_type: opportunity
+        status: negotiating
+        priority: critical
+        labels:
+          - enterprise
+          - annual-contract
+
+      - title: Summit Education Group - cold outreach response
+        description: Director of IT responded to outreach sequence. Interested in replacing Trello for 12 cross-functional teams.
+        issue_type: lead
+        status: qualified
+        priority: medium
+        labels:
+          - outbound
+          - education
+
+      - title: GreenField Energy - closed won, pending onboarding
+        description: 150-seat Business plan signed. Annual contract worth $54k. Handoff to customer success for onboarding kickoff.
+        issue_type: deal
+        status: won
+        priority: high
+        labels:
+          - closed-won
+          - energy
