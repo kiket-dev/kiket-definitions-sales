@@ -7,9 +7,9 @@ automations:
     enabled: true
 
     trigger:
-      event: issue.created
+      event: case.created
       conditions:
-        - field: issue_type
+        - field: case_type
           equals: lead
 
     actions:
@@ -27,9 +27,9 @@ automations:
     enabled: true
 
     trigger:
-      event: issue.updated
+      event: case.updated
       conditions:
-        - field: issue_type
+        - field: case_type
           equals: lead
         - field: custom_fields.lead_score
           gte: 80
@@ -55,7 +55,7 @@ automations:
       cron: "0 9 * * 1"  # Weekly on Monday at 9 AM
 
     query:
-      issue_types: [lead]
+      case_types: [lead]
       statuses: [qualified, demo_scheduled, proposal, negotiating]
       last_updated_before: 14d
 
@@ -74,9 +74,9 @@ automations:
     enabled: true
 
     trigger:
-      event: issue.transitioned
+      event: case.transitioned
       conditions:
-        - field: issue_type
+        - field: case_type
           equals: lead
         - field: to_status
           equals: won

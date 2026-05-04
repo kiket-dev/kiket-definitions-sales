@@ -12,10 +12,10 @@ agent:
         Analyze this lost deal and provide insights for improvement.
 
         **Deal Information:**
-        - Company: {{issue.custom_fields.company_name}}
-        - Deal Value: ${{issue.custom_fields.deal_value}}
-        - Lead Source: {{issue.custom_fields.lead_source}}
-        - Time in Pipeline: {{issue.created_at}} to {{issue.updated_at}}
+        - Company: {{case.custom_fields.company_name}}
+        - Deal Value: ${{case.custom_fields.deal_value}}
+        - Lead Source: {{case.custom_fields.lead_source}}
+        - Time in Pipeline: {{case.created_at}} to {{case.updated_at}}
 
         **Deal History:**
         {{#each context.activities}}
@@ -32,9 +32,9 @@ agent:
         Provide coaching for this active deal.
 
         **Deal Information:**
-        - Company: {{issue.custom_fields.company_name}}
-        - Stage: {{issue.status}}
-        - Deal Value: ${{issue.custom_fields.deal_value}}
+        - Company: {{case.custom_fields.company_name}}
+        - Stage: {{case.status}}
+        - Deal Value: ${{case.custom_fields.deal_value}}
         - Days in Stage: {{context.days_in_stage}}
 
         Suggest:

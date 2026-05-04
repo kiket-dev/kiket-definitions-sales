@@ -9,7 +9,7 @@ inbound_email:
     - email_address: sales
       description: "Sales inquiries and leads"
       issue_defaults:
-        issue_type: Lead
+        case_type: Lead
         priority: medium
         labels:
           - sales
@@ -21,7 +21,7 @@ inbound_email:
     - email_address: demo
       description: "Demo requests"
       issue_defaults:
-        issue_type: Lead
+        case_type: Lead
         priority: high
         labels:
           - demo-request
@@ -33,7 +33,7 @@ inbound_email:
     - email_address: partnerships
       description: "Partnership inquiries"
       issue_defaults:
-        issue_type: Opportunity
+        case_type: Opportunity
         priority: medium
         labels:
           - partnership

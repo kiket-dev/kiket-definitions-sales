@@ -7,7 +7,7 @@ board:
   workflow: sales
 
 filters:
-  issue_types:
+  case_types:
     - lead
   workflows:
     - sales

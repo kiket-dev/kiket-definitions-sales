@@ -19,7 +19,7 @@ This definition provides a complete sales pipeline system including:
 ```
 .kiket/
 ├── project.yaml           # Definition metadata
-├── issue_types.yaml       # Lead issue type
+├── case_types.yaml       # Lead case type
 ├── workflows/
 │   └── sales.yaml         # Sales pipeline workflow
 ├── agents/

@@ -15,7 +15,7 @@ dashboard:
       title: Pipeline Value
       position: {row: 1, col: 1}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [qualified, demo_scheduled, proposal, negotiating]
         aggregate: sum
         field: custom_fields.deal_value
@@ -26,7 +26,7 @@ dashboard:
       title: Won (MTD)
       position: {row: 1, col: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [won]
         closed_date: this_month
         aggregate: sum
@@ -38,7 +38,7 @@ dashboard:
       title: Active Deals
       position: {row: 1, col: 3}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [qualified, demo_scheduled, proposal, negotiating]
         aggregate: count
 
@@ -47,7 +47,7 @@ dashboard:
       title: Avg Deal Size
       position: {row: 1, col: 4}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [won]
         date_range: last_90_days
         aggregate: avg
@@ -60,7 +60,7 @@ dashboard:
       title: Sales Funnel
       position: {row: 2, col: 1, span: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         group_by: status
         order: [lead, qualified, demo_scheduled, proposal, negotiating, won]
         value_field: custom_fields.deal_value
@@ -70,7 +70,7 @@ dashboard:
       title: Pipeline by Stage
       position: {row: 2, col: 3, span: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [qualified, demo_scheduled, proposal, negotiating]
         group_by: status
         aggregate: sum
@@ -82,7 +82,7 @@ dashboard:
       title: Win Rate (90 Days)
       position: {row: 3, col: 1}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         date_range: last_90_days
         aggregate: win_rate
       thresholds:
@@ -94,7 +94,7 @@ dashboard:
       title: Avg Sales Cycle
       position: {row: 3, col: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [won]
         date_range: last_90_days
         aggregate: avg
@@ -106,7 +106,7 @@ dashboard:
       title: Pipeline by Rep
       position: {row: 3, col: 3, span: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [qualified, demo_scheduled, proposal, negotiating]
         group_by: assignee
         aggregate: sum
@@ -118,7 +118,7 @@ dashboard:
       title: Won Deals (12 Months)
       position: {row: 4, col: 1, span: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [won]
         date_range: last_12_months
         aggregate: sum
@@ -131,7 +131,7 @@ dashboard:
       title: Closing This Month
       position: {row: 4, col: 3, span: 2}
       query:
-        issue_types: [lead]
+        case_types: [lead]
         statuses: [proposal, negotiating]
         custom_fields.expected_close_date: this_month
         order_by: custom_fields.deal_value
