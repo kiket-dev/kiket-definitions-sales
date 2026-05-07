@@ -84,15 +84,15 @@ states:
       - action: notify
         recipients:
           roles: [sales, admin]
-        message: "🎉 Deal won: ${issue.custom_fields.company_name} - $${issue.custom_fields.deal_value}"
+        message: "🎉 Deal won: ${case.custom_fields.company_name} - $${case.custom_fields.deal_value}"
         level: success
       - action: webhook
         url: "${env.CRM_WEBHOOK}"
         method: POST
         body:
           event: deal_won
-          company: "${issue.custom_fields.company_name}"
-          value: "${issue.custom_fields.deal_value}"
+          company: "${case.custom_fields.company_name}"
+          value: "${case.custom_fields.deal_value}"
 
   lost:
     type: final

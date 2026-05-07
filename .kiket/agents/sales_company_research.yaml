@@ -10,8 +10,8 @@ agent:
       content: |
         Research the following company to prepare for a sales conversation.
 
-        **Company:** {{issue.custom_fields.company_name}}
-        **Contact:** {{issue.custom_fields.contact_name}}
+        **Company:** {{case.custom_fields.company_name}}
+        **Contact:** {{case.custom_fields.contact_name}}
         **Context:** {{input.format}}
 
         {{#if (eq input.format "demo_prep")}}

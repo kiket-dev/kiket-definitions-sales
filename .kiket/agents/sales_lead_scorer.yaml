@@ -11,10 +11,10 @@ agent:
         Analy the following sales lead based on the provided.
 
         **Lead Information:**
-        - Company: {{issue.custom_fields.company_name}}
-        - Contact: {{issue.custom_fields.contact_name}} ({{issue.custom_fields.contact_email}})
-        - Company Size: {{issue.custom_fields.company_size}}
-        - Lead Source: {{issue.custom_fields.lead_source}}
+        - Company: {{case.custom_fields.company_name}}
+        - Contact: {{case.custom_fields.contact_name}} ({{case.custom_fields.contact_email}})
+        - Company Size: {{case.custom_fields.company_size}}
+        - Lead Source: {{case.custom_fields.lead_source}}
 
         **Scoring Criteria:**
         1. **Company Fit (0-30 points)**

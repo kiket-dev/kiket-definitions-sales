@@ -11,14 +11,14 @@ This definition provides a complete sales pipeline system including:
 - **Intake Form**: Public demo request / lead capture form
 - **Board**: Pipeline board with deal size swimlanes
 - **Dashboard**: Pipeline value, win rates, sales performance
-- **Analytics**: Pipeline health, conversion funnel, deal velocity, revenue trends
+- **Dashboards**: Pipeline health, conversion funnel, deal velocity, revenue trends
 - **Automations**: Lead scoring, qualification, stale deal alerts
 
 ## Structure
 
 ```
 .kiket/
-├── project.yaml           # Definition metadata
+├── workspace.yaml           # Definition metadata
 ├── case_types.yaml       # Lead case type
 ├── workflows/
 │   └── sales.yaml         # Sales pipeline workflow

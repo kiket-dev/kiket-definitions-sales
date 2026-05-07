@@ -42,7 +42,7 @@ automations:
       - type: notify
         recipients:
           roles: [sales]
-        message: "🌟 High-value lead qualified: {{issue.custom_fields.company_name}} (Score: {{issue.custom_fields.lead_score}})"
+        message: "🌟 High-value lead qualified: {{case.custom_fields.company_name}} (Score: {{case.custom_fields.lead_score}})"
 
   - id: stale-deal-alert
     name: Stale Deal Alert
@@ -63,7 +63,7 @@ automations:
       - type: notify
         recipients:
           user: assignee
-        message: "📊 Stale deal alert: {{issue.title}} has had no activity for 14+ days"
+        message: "📊 Stale deal alert: {{case.title}} has had no activity for 14+ days"
       - type: add_label
         label: stale
 
@@ -85,9 +85,9 @@ automations:
       - type: notify
         recipients:
           roles: [sales, executive]
-        message: "🎉 Deal won! {{issue.custom_fields.company_name}} - ${{issue.custom_fields.deal_value}}"
+        message: "🎉 Deal won! {{case.custom_fields.company_name}} - ${{case.custom_fields.deal_value}}"
         level: success
       - type: webhook
         url: "{{config.slack_webhook}}"
         payload:
-          text: "🎉 *Deal Won!* {{issue.custom_fields.company_name}} - ${{issue.custom_fields.deal_value}} by {{issue.assignee.name}}"
+          text: "🎉 *Deal Won!* {{case.custom_fields.company_name}} - ${{case.custom_fields.deal_value}} by {{case.assignee.name}}"
